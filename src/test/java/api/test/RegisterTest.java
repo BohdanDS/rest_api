@@ -47,7 +47,7 @@ public class RegisterTest extends TestBase{
     }
 
     @Test
-    @DisplayName("Registration with empty email address")
+    @DisplayName("Registration without email address")
     void emptyEmailRegistrationTest(){
         String jsonData = "{\"email\": \"\", \"password\": \"pistol\"}";
 
