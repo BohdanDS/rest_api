@@ -1,5 +1,6 @@
 package api.test;
 
+
 import io.restassured.http.ContentType;
 import models.lombok.RegistrationBodyLombokModel;
 import models.lombok.RegistrationResponseLombokModel;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
+import static helpers.CustomAllureListener.withCustomTemplates;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -97,6 +99,7 @@ public class RegisterRefactorTest extends TestBase{
 
 
         RegistrationResponseLombokModel response =  given()
+                .filter(withCustomTemplates())
                 .body(registrationData)
                 .contentType(ContentType.JSON)
                 .when()
