@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 
 import static helpers.CustomAllureListener.withCustomTemplates;
+import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -97,20 +98,20 @@ public class RegisterRefactorTest extends TestBase{
         registrationData.setEmail("eve.holt@reqres.in");
         registrationData.setPassword("pistol");
 
-
-        RegistrationResponseLombokModel response =  given()
+        RegistrationResponseLombokModel response = step("Make Request", ()-> given()
                 .filter(withCustomTemplates())
                 .body(registrationData)
                 .contentType(ContentType.JSON)
                 .when()
                 .post("/register")
                 .then()
-                .log().body()
-                .statusCode(200)
-                .extract().as(RegistrationResponseLombokModel.class);
+                .extract().as(RegistrationResponseLombokModel.class));
 
-        assertEquals(4, response.getId());
-        assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
+        step("Check request", ()->{
+            assertEquals(4, response.getId());
+            assertEquals("QpwL5tke4Pnpja7X4", response.getToken());
+        });
+
 
     }
 
