@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "io.freefair.lombok" version "6.0.0-m2"
 }
 
 group = 'org.example'
@@ -16,6 +17,7 @@ def     slf4jVersion = "2.0.9",
 dependencies {
     testImplementation(
             'io.rest-assured:rest-assured:5.4.0',
+            'io.rest-assured:json-schema-validator:5.4.0',
             "org.junit.jupiter:junit-jupiter:$junitVersion",
 
     )
