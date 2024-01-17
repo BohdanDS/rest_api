@@ -10,10 +10,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 
-import static helpers.CustomAllureListener.withCustomTemplates;
+
 import static io.qameta.allure.Allure.step;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static specs.RegistrationSpec.*;
 
 public class RegisterRefactorTest extends TestBase{
 
@@ -51,17 +52,16 @@ public class RegisterRefactorTest extends TestBase{
         registrationData.setPassword("");
 
 
-        RegistrationResponseModel response =  given()
-                .body(registrationData)
-                .contentType(ContentType.JSON)
-                .log().body()
+        RegistrationResponseModel response =  step("Make Request", ()->
+                given(registrationRequestSpec)
+                        .body(registrationData)
+
                 .when()
-                .post("/register")
+                    .post("/register")
+
                 .then()
-                .log().body()
-                .log().status()
-                .statusCode(400)
-                .extract().as(RegistrationResponseModel.class);
+                        .spec(missingPasswordResponseSpec)
+                    .extract().as(RegistrationResponseModel.class));
 
         assertEquals("Missing password", response.getError());
 
@@ -98,14 +98,16 @@ public class RegisterRefactorTest extends TestBase{
         registrationData.setEmail("eve.holt@reqres.in");
         registrationData.setPassword("pistol");
 
-        RegistrationResponseLombokModel response = step("Make Request", ()-> given()
-                .filter(withCustomTemplates())
-                .body(registrationData)
-                .contentType(ContentType.JSON)
+        RegistrationResponseLombokModel response = step("Make Request", ()->
+                given(registrationRequestSpec)
+                    .body(registrationData)
+
                 .when()
-                .post("/register")
+                    .post("/register")
+
                 .then()
-                .extract().as(RegistrationResponseLombokModel.class));
+                    .spec(registrationResponseSpec)
+                    .extract().as(RegistrationResponseLombokModel.class));
 
         step("Check request", ()->{
             assertEquals(4, response.getId());
